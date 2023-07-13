@@ -36,11 +36,6 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Main Screen!!',
-        ),
-      ),
       body: TabBarView(
         controller: tabController,
         physics: const NeverScrollableScrollPhysics(),
@@ -52,26 +47,40 @@ class _MainScreenState extends State<MainScreen>
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.white54,
+        selectedItemColor: Colors.white,
+        backgroundColor: Colors.black,
+        type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: const TextStyle(
+          fontSize: 14,
+        ),
+        showUnselectedLabels: true,
+        currentIndex: selectedIndex,
+        onTap: onItemClicked,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_filled,
             ),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.currency_rupee,
+              Icons.credit_card,
             ),
+            label: 'Earnings',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.star,
             ),
+            label: 'Ratings',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
             ),
+            label: 'Profile',
           ),
         ],
       ),
