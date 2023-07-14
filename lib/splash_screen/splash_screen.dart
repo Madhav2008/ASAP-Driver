@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'package:asap_drivers_app/auth/sign_up_screen.dart';
-import 'package:asap_drivers_app/main_screen/main_screen.dart';
+import 'package:asap_drivers_app/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (builder) => const SignUpScreen(),
+            builder: (builder) => const LoginScreen(),
           ),
         );
       },

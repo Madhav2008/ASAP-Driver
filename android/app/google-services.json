@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "956200518063",
+    "project_id": "asap-india",
+    "storage_bucket": "asap-india.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956200518063:android:d2bd141fee959dc9eaaf5a",
+        "android_client_info": {
+          "package_name": "com.asap.asap_drivers_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956200518063-htt9g1gfh8bs87uhmcl7aa5b4m6mstfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcQ08gIiwhuI9hDn1Mw1eIx3HYGPcNj_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956200518063-htt9g1gfh8bs87uhmcl7aa5b4m6mstfc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
