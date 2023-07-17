@@ -1,4 +1,8 @@
+import 'package:asap_drivers_app/global/global.dart';
+import 'package:asap_drivers_app/splash_screen/splash_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CarInfoScreen extends StatefulWidget {
   const CarInfoScreen({Key? key}) : super(key: key);
@@ -19,6 +23,31 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
   ];
 
   String? selectedCarType;
+
+  saveCarInfo() {
+    Map driverCarInfoMap = {
+      'car_model': carModelController.text.trim(),
+      'car_number': carNoController.text.trim(),
+      'car_color': carColorController.text.trim(),
+      'type': selectedCarType,
+    };
+    DatabaseReference driversRef =
+        FirebaseDatabase.instance.ref().child('drivers');
+    driversRef
+        .child(currentFirebaseUser!.uid)
+        .child('car_details')
+        .set(driverCarInfoMap);
+
+    Fluttertoast.showToast(
+      msg: 'Car Info saved Successfully!!',
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (builder) => const SplashScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,6 +256,12 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  if (carColorController.text.isNotEmpty &&
+                      carNoController.text.isNotEmpty &&
+                      carModelController.text.isNotEmpty &&
+                      selectedCarType != null) {
+                    saveCarInfo();
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -1,5 +1,9 @@
 import 'package:asap_drivers_app/auth/car_info_screen.dart';
 import 'package:asap_drivers_app/auth/login_screen.dart';
+import 'package:asap_drivers_app/global/global.dart';
+import 'package:asap_drivers_app/widgets/progress_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -34,11 +38,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
         msg: 'Password must contain atleast 6 Characters.',
       );
     } else {
+      saveDriverInfo();
+    }
+  }
+
+  saveDriverInfo() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ProgressDialog(
+          message: 'Processing, Please Wait...',
+        );
+      },
+    );
+    final User? firebaseUser = (await fAuth
+            .createUserWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+            .catchError(
+      (msg) {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: 'Error: ${msg.toString()}',
+        );
+      },
+    ))
+        .user;
+    if (firebaseUser != null) {
+      Map driverMap = {
+        'id': firebaseUser.uid,
+        'name': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'phoneNo': phoneNoController.text.trim(),
+      };
+
+      DatabaseReference driversRef =
+          FirebaseDatabase.instance.ref().child('drivers');
+      driversRef.child(firebaseUser.uid).set(driverMap);
+
+      currentFirebaseUser = firebaseUser;
+      Fluttertoast.showToast(
+        msg: 'Account has successfully been created!!',
+      );
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (builder) => const CarInfoScreen(),
         ),
+      );
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: 'Account hasn\'t been created!!',
       );
     }
   }

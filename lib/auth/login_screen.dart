@@ -1,5 +1,10 @@
 import 'package:asap_drivers_app/auth/sign_up_screen.dart';
+import 'package:asap_drivers_app/global/global.dart';
+import 'package:asap_drivers_app/splash_screen/splash_screen.dart';
+import 'package:asap_drivers_app/widgets/progress_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +16,63 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  validateForm() {
+    if (!emailController.text.contains('@')) {
+      Fluttertoast.showToast(
+        msg: 'Email address is required.',
+      );
+    } else if (passwordController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Password is required.',
+      );
+    } else {
+      loginUser();
+    }
+  }
+
+  loginUser() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ProgressDialog(
+          message: 'Processing, Please Wait...',
+        );
+      },
+    );
+    final User? firebaseUser = (await fAuth
+        .signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+        .catchError(
+          (msg) {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: 'Error: ${msg.toString()}',
+        );
+      },
+    ))
+        .user;
+    if (firebaseUser != null) {
+      currentFirebaseUser = firebaseUser;
+      Fluttertoast.showToast(
+        msg: 'Login successfully!!',
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => const SplashScreen(),
+        ),
+      );
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: 'An unknown error occurred!!',
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,12 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (builder) => const CarInfoScreen(),
-                  //   ),
-                  // );
+                  validateForm();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF9F0B),

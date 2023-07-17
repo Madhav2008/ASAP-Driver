@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:asap_drivers_app/auth/login_screen.dart';
+import 'package:asap_drivers_app/global/global.dart';
+import 'package:asap_drivers_app/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,12 +18,22 @@ class _SplashScreenState extends State<SplashScreen> {
         seconds: 3,
       ),
       () async {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (builder) => const LoginScreen(),
-          ),
-        );
+        if (fAuth.currentUser != null) {
+          currentFirebaseUser = fAuth.currentUser;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (builder) => const MainScreen(),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (builder) => const LoginScreen(),
+            ),
+          );
+        }
       },
     );
   }
